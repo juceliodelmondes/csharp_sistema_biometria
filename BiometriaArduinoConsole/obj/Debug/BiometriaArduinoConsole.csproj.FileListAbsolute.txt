@@ -1,0 +1,7 @@
+C:\Users\Jucelio\source\repos\BiometriaArduinoConsole\BiometriaArduinoConsole\bin\Debug\BiometriaArduinoConsole.exe.config
+C:\Users\Jucelio\source\repos\BiometriaArduinoConsole\BiometriaArduinoConsole\bin\Debug\BiometriaArduinoConsole.exe
+C:\Users\Jucelio\source\repos\BiometriaArduinoConsole\BiometriaArduinoConsole\bin\Debug\BiometriaArduinoConsole.pdb
+C:\Users\Jucelio\source\repos\BiometriaArduinoConsole\BiometriaArduinoConsole\obj\Debug\BiometriaArduinoConsole.csprojAssemblyReference.cache
+C:\Users\Jucelio\source\repos\BiometriaArduinoConsole\BiometriaArduinoConsole\obj\Debug\BiometriaArduinoConsole.csproj.CoreCompileInputs.cache
+C:\Users\Jucelio\source\repos\BiometriaArduinoConsole\BiometriaArduinoConsole\obj\Debug\BiometriaArduinoConsole.exe
+C:\Users\Jucelio\source\repos\BiometriaArduinoConsole\BiometriaArduinoConsole\obj\Debug\BiometriaArduinoConsole.pdb
