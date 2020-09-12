@@ -5,3 +5,8 @@ C:\Users\Jucelio\source\repos\BiometriaArduinoConsole\BiometriaArduinoConsole\ob
 C:\Users\Jucelio\source\repos\BiometriaArduinoConsole\BiometriaArduinoConsole\obj\Debug\BiometriaArduinoConsole.csproj.CoreCompileInputs.cache
 C:\Users\Jucelio\source\repos\BiometriaArduinoConsole\BiometriaArduinoConsole\obj\Debug\BiometriaArduinoConsole.exe
 C:\Users\Jucelio\source\repos\BiometriaArduinoConsole\BiometriaArduinoConsole\obj\Debug\BiometriaArduinoConsole.pdb
+C:\Users\Jucelio\source\repos\BiometriaArduinoConsole\BiometriaArduinoConsole\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Jucelio\source\repos\BiometriaArduinoConsole\BiometriaArduinoConsole\bin\Debug\System.Net.Http.Formatting.dll
+C:\Users\Jucelio\source\repos\BiometriaArduinoConsole\BiometriaArduinoConsole\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Jucelio\source\repos\BiometriaArduinoConsole\BiometriaArduinoConsole\bin\Debug\System.Net.Http.Formatting.xml
+C:\Users\Jucelio\source\repos\BiometriaArduinoConsole\BiometriaArduinoConsole\obj\Debug\BiometriaArduinoConsole.csproj.CopyComplete

@@ -4,11 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO.Ports;
+using System.Net.Http;
 
 namespace BiometriaArduinoConsole {
+    public class RequestAccess
+    {
+        public int id { get; set; }
+        public int confidence { get; set; }
+    }
+
+    public class ResponseAccess
+    {
+        public String command { get; set; }
+    }
     class Program
     {
         static SerialPort serial = new SerialPort();
+        public static HttpClient client = new HttpClient();
         static void Main(string[] args)
         {
             serial.PortName = "COM6";
@@ -31,7 +43,29 @@ namespace BiometriaArduinoConsole {
 
         private static void ler(Object sender, EventArgs e)
         {
-            Console.WriteLine(serial.ReadLine());
+            String leitura = serial.ReadLine();
+            String[] array = leitura.Split(' ');
+            if(array[0].Equals("access"))
+            {
+                validarAcesso(Convert.ToInt32(array[1]), Convert.ToInt32(array[2]));
+            } 
+            else
+            {
+                Console.WriteLine(leitura);
+            }
+        }
+
+        static async void validarAcesso(int id, int confidence)
+        {
+            Console.WriteLine("Validando acesso: " + id);
+            RequestAccess info = new RequestAccess();
+            info.id = id;
+            info.confidence = confidence;
+            HttpResponseMessage response = await client.PostAsJsonAsync(
+                "http://localhost:8080/user/validate/", info);
+            response.EnsureSuccessStatusCode();
+            ResponseAccess responseAcess = await response.Content.ReadAsAsync<ResponseAccess>();
+
         }
     }
 }
