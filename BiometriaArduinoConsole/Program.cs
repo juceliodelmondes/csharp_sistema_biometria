@@ -7,18 +7,19 @@ using System.IO.Ports;
 using System.Net.Http;
 
 namespace BiometriaArduinoConsole {
-    public class RequestAccess
+    public class ValidationRequest
     {
         public int id { get; set; }
         public int confidence { get; set; }
     }
 
-    public class ResponseAccess
+    public class CommandResponse
     {
         public String command { get; set; }
 
         public String commandParameter { get; set; }
     }
+
     class Program
     {
         static SerialPort serial = new SerialPort();
@@ -52,6 +53,10 @@ namespace BiometriaArduinoConsole {
             {
                 validarAcesso(Convert.ToInt32(array[1]), Convert.ToInt32(array[2]));
             } 
+            else if(array[0].Equals("?")) //procurar comandos
+            {
+                procurarComandos();
+            }
             else
             {
                 Console.WriteLine(leitura);
@@ -71,15 +76,21 @@ namespace BiometriaArduinoConsole {
         static async void validarAcesso(int id, int confidence)
         {
             Console.WriteLine("Validando acesso: " + id);
-            RequestAccess info = new RequestAccess();
+            ValidationRequest info = new ValidationRequest();
             info.id = id;
             info.confidence = confidence;
             HttpResponseMessage response = await client.PostAsJsonAsync(
                 "http://localhost:8080/user/validate/", info);
             response.EnsureSuccessStatusCode();
-            ResponseAccess responseAcess = await response.Content.ReadAsAsync<ResponseAccess>();
-            Console.WriteLine(responseAcess.command);
-            Console.WriteLine(responseAcess.commandParameter);
+            CommandResponse responseAcess = await response.Content.ReadAsAsync<CommandResponse>();
+            write(responseAcess.command, responseAcess.commandParameter);
+        }
+
+        static async void procurarComandos()
+        {
+            HttpResponseMessage response = await client.GetAsync("http://localhost:8080/command/getCommand");
+            response.EnsureSuccessStatusCode();
+            CommandResponse responseAcess = await response.Content.ReadAsAsync<CommandResponse>();
             write(responseAcess.command, responseAcess.commandParameter);
         }
     }
