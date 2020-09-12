@@ -16,6 +16,8 @@ namespace BiometriaArduinoConsole {
     public class ResponseAccess
     {
         public String command { get; set; }
+
+        public String commandParameter { get; set; }
     }
     class Program
     {
@@ -26,7 +28,7 @@ namespace BiometriaArduinoConsole {
             serial.PortName = "COM6";
             serial.BaudRate = 9600;
             serial.Open();
-            serial.DataReceived += new SerialDataReceivedEventHandler(ler);
+            serial.DataReceived += new SerialDataReceivedEventHandler(read);
             while(true)
             {
                 String cmd = Console.ReadLine();
@@ -41,7 +43,8 @@ namespace BiometriaArduinoConsole {
             }
         }
 
-        private static void ler(Object sender, EventArgs e)
+        //realiza a leitura do arduino (evento)
+        private static void read(Object sender, EventArgs e)
         {
             String leitura = serial.ReadLine();
             String[] array = leitura.Split(' ');
@@ -55,6 +58,16 @@ namespace BiometriaArduinoConsole {
             }
         }
 
+        //Envia o comando para o arduino
+        private static void write(String command, String commandParameter)
+        {
+            if (command != null)
+            {
+                serial.Write(command + " " + commandParameter);
+            }
+        }
+
+        //envia o Id cadastrado no arduino para a API
         static async void validarAcesso(int id, int confidence)
         {
             Console.WriteLine("Validando acesso: " + id);
@@ -65,7 +78,9 @@ namespace BiometriaArduinoConsole {
                 "http://localhost:8080/user/validate/", info);
             response.EnsureSuccessStatusCode();
             ResponseAccess responseAcess = await response.Content.ReadAsAsync<ResponseAccess>();
-
+            Console.WriteLine(responseAcess.command);
+            Console.WriteLine(responseAcess.commandParameter);
+            write(responseAcess.command, responseAcess.commandParameter);
         }
     }
 }
