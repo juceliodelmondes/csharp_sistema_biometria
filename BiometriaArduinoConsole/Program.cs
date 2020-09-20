@@ -20,6 +20,13 @@ namespace BiometriaArduinoConsole {
         public String commandParameter { get; set; }
     }
 
+    public class StatusBiometry
+    {
+        public int idBiometry { get; set; }
+        
+        public String status { get; set; }
+    }
+
     class Program
     {
         static SerialPort serial = new SerialPort();
@@ -56,6 +63,10 @@ namespace BiometriaArduinoConsole {
             else if(array[0].Equals("?")) //procurar comandos
             {
                 procurarComandos();
+            }
+            else if(array[0].Equals("Waiting") || array[0].Equals("Removef") || array[0].Equals("Waiting2") || 
+                array[0].Equals("Recorded") || array[0].Equals("Error")) {
+                atualizarStatus(array[0], Convert.ToInt32(array[1]));
             }
             else
             {
@@ -111,6 +122,28 @@ namespace BiometriaArduinoConsole {
                 
             }
             catch(Exception er)
+            {
+
+            }
+        }
+
+        static async void atualizarStatus(String information, int idBiometry)
+        {
+            try
+            {
+                Console.WriteLine("Enviando status: " + information + " "+idBiometry);
+                StatusBiometry status = new StatusBiometry();
+                status.idBiometry = idBiometry;
+                status.status = information;
+                HttpResponseMessage response = await client.PostAsJsonAsync(
+                    "http://localhost:8080/biometry/setRegisterStatus/", status);
+                response.EnsureSuccessStatusCode();
+            }
+            catch (HttpRequestException er)
+            {
+
+            }
+            catch (Exception er)
             {
 
             }
