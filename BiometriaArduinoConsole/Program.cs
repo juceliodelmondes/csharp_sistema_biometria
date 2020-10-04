@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO.Ports;
 using System.Net.Http;
+using System.Speech.Synthesis;
 
 namespace BiometriaArduinoConsole {
     public class ValidationRequest
@@ -18,6 +15,8 @@ namespace BiometriaArduinoConsole {
         public String command { get; set; }
 
         public String commandParameter { get; set; }
+
+        public String textSpeech { get; set; }
     }
 
     public class StatusBiometry
@@ -31,13 +30,15 @@ namespace BiometriaArduinoConsole {
     {
         static SerialPort serial = new SerialPort();
         public static HttpClient client = new HttpClient();
+        private static SpeechSynthesizer sp = new SpeechSynthesizer();
         static void Main(string[] args)
         {
             serial.PortName = "COM6";
             serial.BaudRate = 9600;
             serial.Open();
             serial.DataReceived += new SerialDataReceivedEventHandler(read);
-            while(true)
+            sp = new SpeechSynthesizer();
+            while (true)
             {
                 String cmd = Console.ReadLine();
                 if(cmd.Equals("exit"))
@@ -93,10 +94,11 @@ namespace BiometriaArduinoConsole {
                 info.id = id;
                 info.confidence = confidence;
                 HttpResponseMessage response = await client.PostAsJsonAsync(
-                    "http://localhost:8080/user/validate/", info);
+                    "http://192.168.1.100:8080/user/validate/", info);
                 response.EnsureSuccessStatusCode();
                 CommandResponse responseAcess = await response.Content.ReadAsAsync<CommandResponse>();
                 write(responseAcess.command, responseAcess.commandParameter);
+                falar(responseAcess.textSpeech);
             }
             catch (HttpRequestException er)
             {
@@ -136,7 +138,7 @@ namespace BiometriaArduinoConsole {
                 status.idBiometry = idBiometry;
                 status.status = information;
                 HttpResponseMessage response = await client.PostAsJsonAsync(
-                    "http://localhost:8080/biometry/setRegisterStatus/", status);
+                    "http://192.168.1.100:8080/biometry/setRegisterStatus/", status);
                 response.EnsureSuccessStatusCode();
             }
             catch (HttpRequestException er)
@@ -147,6 +149,12 @@ namespace BiometriaArduinoConsole {
             {
 
             }
+        }
+
+        private static void falar(string text)
+        {
+            sp.SpeakAsyncCancelAll();
+            sp.SpeakAsync(text);
         }
     }
 }
